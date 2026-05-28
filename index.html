@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Кухня без границ — Telegram-бот для подбора рецептов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            color: #2d3e50;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Шапка */
+        .header {
+            background: #ff8c42;
+            background: linear-gradient(135deg, #ff8c42 0%, #ff6b2b 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Секции */
+        .section {
+            padding: 2rem 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            color: #ff6b2b;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section h2 i {
+            font-size: 1.8rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: #f9fafc;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: #2d3e50;
+        }
+
+        .card p, .card ul {
+            color: #4a627a;
+        }
+
+        .card ul {
+            padding-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .card li {
+            margin: 0.4rem 0;
+        }
+
+        /* Блок с ботом */
+        .bot-block {
+            background: #fff4e8;
+            text-align: center;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin: 1rem 0;
+        }
+
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #2aabee;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 3rem;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.1s;
+            margin: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .telegram-btn:hover {
+            background: #1f8bcb;
+            transform: scale(1.02);
+        }
+
+        .qr-code {
+            margin: 1rem auto;
+            max-width: 180px;
+            background: white;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            display: inline-block;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }
+
+        .footer {
+            background: #2d3e50;
+            color: #b0c4de;
+            text-align: center;
+            padding: 1.8rem;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #ffb347;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.8rem; }
+            .section { padding: 1.5rem; }
+            .telegram-btn { font-size: 1rem; padding: 0.8rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🍲 Кухня без границ</h1>
+        <p>Telegram-бот, который придумает ужин из того, что есть в холодильнике</p>
+    </div>
+
+    <div class="section">
+        <h2>✨ О проекте</h2>
+        <p><strong>«Кухня без границ»</strong> — это умный чат-бот для Telegram. Просто напишите боту список продуктов (например: <em>курица, картофель, лук, сметана</em>), и он предложит несколько вариантов блюд с пошаговыми рецептами и точными пропорциями.</p>
+        <p>Проект создан командой студентов ПГНИУ «Цифровые повара» и призван сократить пищевые отходы, сэкономить время и вдохновить на кулинарные эксперименты.</p>
+    </div>
+
+    <div class="section">
+        <h2>📋 Как пользоваться?</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>1️⃣ Запустите бота</h3>
+                <p>Нажмите кнопку ниже или перейдите по ссылке. В Telegram нажмите <strong>«Start»</strong>.</p>
+            </div>
+            <div class="card">
+                <h3>2️⃣ Напишите продукты</h3>
+                <p>Перечислите продукты через запятую. Например: <strong>«яйца, сыр, помидоры»</strong>.</p>
+            </div>
+            <div class="card">
+                <h3>3️⃣ Выберите рецепт</h3>
+                <p>Бот покажет список подходящих блюд. Нажмите на название — получите подробный рецепт с ингредиентами и пошаговым приготовлением.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🧑‍🍳 Пример работы</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>🍗 Запрос:</h3>
+                <p><code>курица, картошка, лук</code></p>
+            </div>
+            <div class="card">
+                <h3>🍲 Ответ бота:</h3>
+                <ul>
+                    <li>Куриный суп с лапшой</li>
+                    <li>Курица в сливочном соусе</li>
+                    <li>Плов с курицей</li>
+                    <li>Куриные отбивные</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>📖 Полный рецепт</h3>
+                <p>При нажатии на блюдо открывается полная инструкция: ингредиенты в граммах и пошаговые действия.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section bot-block">
+        <h2>🚀 Попробовать прямо сейчас</h2>
+        <p>Наш бот работает в Telegram. Нажмите на кнопку, чтобы открыть чат:</p>
+        <a href="https://t.me/DigitalChefsBot" target="_blank" class="telegram-btn">
+            📱 Перейти в Telegram-бота
+        </a>
+        <div class="qr-code">
+            <!-- Сгенерируйте QR-код со ссылкой https://t.me/DigitalChefsBot и замените src -->
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/DigitalChefsBot" alt="QR-код для бота">
+        </div>
+        <p style="font-size: 0.85rem; margin-top: 1rem;">Или отсканируйте QR-код камерой телефона</p>
+    </div>
+
+    <div class="section">
+        <h2>👥 Команда «Цифровые повара»</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>👩‍🍳 Кузовникова Анастасия</h3>
+                <p>Руководитель проекта, заказчик. Планирование, контроль сроков, взаимодействие с куратором.</p>
+            </div>
+            <div class="card">
+                <h3>💻 Третьяков Владислав</h3>
+                <p>Разработчик бота и сайта. Python, SQLite, Telegram API, вёрстка, хостинг.</p>
+            </div>
+            <div class="card">
+                <h3>📚 Уросов Сергей</h3>
+                <p>Координатор, сбор рецептов, документация, презентация, обратная связь.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>🍽 «Кухня без границ» — готовим с умом, без границ!<br>
+        Проект выполнен в рамках учебной дисциплины «Управление проектами» (ПГНИУ, 2026).<br>
+        <a href="https://t.me/DigitalChefsBot" target="_blank">@DigitalChefsBot</a></p>
+    </div>
+</div>
+</body>
+</html>
